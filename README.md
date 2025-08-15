@@ -80,6 +80,21 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Note: for 5090, flash_attn should be installed manually
+```
+# 克隆代码
+git clone https://github.com/kaixinguor/flash-attention.git
+cd flash-attention
+git checkout sm120_cu129_torch2.9
+
+# 编译安装标准分支(not hopper)
+export FLASH_ATTN_CUDA_ARCHS="120"
+export NVCC_THREADS="2"
+export CUDA_HOME="/usr/local/cuda"  # 根据实际安装路径调整
+python setup.py build_ext
+python setup.py install
+```
+
 
 #### Model Download
 
