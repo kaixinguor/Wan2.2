@@ -112,7 +112,11 @@ python setup.py install
 Download models using huggingface-cli:
 ``` sh
 pip install "huggingface_hub[cli]"
+
 huggingface-cli download Wan-AI/Wan2.2-T2V-A14B --local-dir ./Wan2.2-T2V-A14B
+
+export HF_ENDPOINT=https://hf-mirror.com
+huggingface-cli download Wan-AI/Wan2.2-TI2V-5B --local-dir Wan2.2-TI2V-5B
 ```
 
 Download models using modelscope-cli:
