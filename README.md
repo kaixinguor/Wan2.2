@@ -39,6 +39,7 @@ We are excited to introduce **Wan2.2**, a major upgrade to our foundational vide
 * Jul 28, 2025: 👋 Wan2.2 has been integrated into ComfyUI ([CN](https://docs.comfy.org/zh-CN/tutorials/video/wan/wan2_2) | [EN](https://docs.comfy.org/tutorials/video/wan/wan2_2)). Enjoy!
 * Jul 28, 2025: 👋 Wan2.2's T2V, I2V and TI2V have been integrated into Diffusers ([T2V-A14B](https://huggingface.co/Wan-AI/Wan2.2-T2V-A14B-Diffusers) | [I2V-A14B](https://huggingface.co/Wan-AI/Wan2.2-I2V-A14B-Diffusers) | [TI2V-5B](https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers)). Feel free to give it a try!
 * Jul 28, 2025: 👋 We've released the inference code and model weights of **Wan2.2**.
+* Sep 5, 2025: 👋 We add text-to-speech synthesis support with [CosyVoice](https://github.com/FunAudioLLM/CosyVoice) for Speech-to-Video generation task.
 
 
 ## Community Works
@@ -46,7 +47,8 @@ If your research or project builds upon [**Wan2.1**](https://github.com/Wan-Vide
 
 - [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio) provides comprehensive support for Wan 2.2, including low-GPU-memory layer-by-layer offload, FP8 quantization, sequence parallelism, LoRA training, full training.
 - [Kijai's ComfyUI WanVideoWrapper](https://github.com/kijai/ComfyUI-WanVideoWrapper) is an alternative implementation of Wan models for ComfyUI. Thanks to its Wan-only focus, it's on the frontline of getting cutting edge optimizations and hot research features, which are often hard to integrate into ComfyUI quickly due to its more rigid structure.
-
+- [Cache-dit](https://github.com/vipshop/cache-dit) offers Fully Cache Acceleration support for Wan2.2 MoE with DBCache, TaylorSeer and Cache CFG. Visit their [example](https://github.com/vipshop/cache-dit/blob/main/examples/pipeline/run_wan_2.2.py) for more details.
+- [FastVideo](https://github.com/hao-ai-lab/FastVideo) includes distilled Wan models with sparse attention that significanly speed up the inference time. 
 
 ## 📑 Todo List
 - Wan2.2 Text-to-Video
@@ -84,6 +86,8 @@ Install dependencies:
 # Ensure torch >= 2.4.0
 # If the installation of `flash_attn` fails, try installing the other packages first and install `flash_attn` last
 pip install -r requirements.txt
+# If you want to use CosyVoice to synthesize speech for Speech-to-Video Generation, please install requirements_s2v.txt additionally
+pip install -r requirements_s2v.txt
 ```
 
 Note: for 5090, flash_attn should be installed manually
@@ -264,6 +268,9 @@ This repository supports the `Wan2.2-S2V-14B` Speech-to-Video model and can simu
 ```sh
 python generate.py  --task s2v-14B --size 1024*704 --ckpt_dir ./Wan2.2-S2V-14B/ --offload_model True --convert_model_dtype --prompt "Summer beach vacation style, a white cat wearing sunglasses sits on a surfboard."  --image "examples/i2v_input.JPG" --audio "examples/talk.wav"
 # Without setting --num_clip, the generated video length will automatically adjust based on the input audio length
+
+# You can use CosyVoice to generate audio with --enable_tts
+python generate.py  --task s2v-14B --size 1024*704 --ckpt_dir ./Wan2.2-S2V-14B/ --offload_model True --convert_model_dtype --prompt "Summer beach vacation style, a white cat wearing sunglasses sits on a surfboard."  --image "examples/i2v_input.JPG" --enable_tts --tts_prompt_audio "examples/zero_shot_prompt.wav" --tts_prompt_text "希望你以后能够做的比我还好呦。" --tts_text "收到好友从远方寄来的生日礼物，那份意外的惊喜与深深的祝福让我心中充满了甜蜜的快乐，笑容如花儿般绽放。"
 ```
 
 > 💡 This command can run on a GPU with at least 80GB VRAM.
